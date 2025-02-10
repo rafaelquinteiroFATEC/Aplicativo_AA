@@ -4,28 +4,85 @@ def main(page: ft.Page):
     page.bgcolor = "#040809"
     cabecalho = ft.Text("Registro de Ocorrências envolvendo Entorpecentes", italic=True, size= 20, color=ft.colors.BLUE_600)
 
+# Funções de Controle
+    def inserir_militar(e):
+        if not (posto_grad.value and re.value and nome_militar.value and btl.value and cia.value and viatura.value and funcao.value):
+            return
+
+        # Criar linha com dados inseridos e botões de ação
+        linha_militar = ft.Row(
+            controls=[
+                ft.Text(f"{posto_grad.value} {re.value} {nome_militar.value}, da {cia.value}ª Cia do {btl.value}, {funcao.value} da viatura {viatura.value}"),
+                
+                ft.IconButton(icon=ft.icons.EDIT, icon_color=ft.colors.BLUE_400, tooltip="Editar"),
+                ft.IconButton(icon=ft.icons.DELETE, icon_color=ft.colors.RED_400, tooltip="Excluir", on_click=lambda e: remover_militar(linha_militar))
+            ],
+        )
+
+        container_inseridos.content.controls.append(linha_militar)
+        container_inseridos.update()
+
+        # Limpar campos
+        posto_grad.value = ""
+        re.value = ""
+        nome_militar.value = ""
+        btl.value = ""
+        cia.value = ""
+        viatura.value = ""
+        funcao.value = ""
+        page.update()
+    
+    def editar_militar(e):
+        ...
+        # Criar função que retorne os valores da linha para a tela
+
+    def remover_militar(linha):
+        container_inseridos.content.controls.remove(linha)
+        container_inseridos.update()
+
+
+    def inserir_entorpecente(e):
+        if not (tipo_entorpecente.value and quantidade.value):
+            return
+
+        # Criar linha com dados inseridos e botões de ação
+        linha_entorpecente = ft.Row(
+            controls=[
+                ft.Text(f"{quantidade.value} Kg de {tipo_entorpecente}"),
+                
+                ft.IconButton(icon=ft.icons.EDIT, icon_color=ft.colors.BLUE_400, tooltip="Editar"),
+                ft.IconButton(icon=ft.icons.DELETE, icon_color=ft.colors.RED_400, tooltip="Excluir", on_click=lambda e: remover_entorpecente(linha_entorpecente)),
+            ],
+        )
+
+        container_inseridos.content.controls.append(linha_entorpecente)
+        container_inseridos.update()
+
+        # Limpar campos
+        tipo_entorpecente.value = ""
+        quantidade.value = ""
+        page.update()
+
+    def remover_entorpecente(linha):
+        container_inseridos.content.controls.remove(linha)
+        container_inseridos.update()
+
+
 # Botões de Ação -------------------------------------------------------------------------------
-    botao_inserir = ft.FilledTonalButton(text="Inserir", icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600)
+    botao_confirmar = ft.FilledTonalButton(text="Confirmar", icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600)
     botao_editar = ft.FilledTonalButton(text="Editar", icon=ft.icons.EDIT, icon_color=ft.colors.YELLOW_400)
     botao_deletar = ft.FilledTonalButton(text="Deletar", icon=ft.icons.DELETE, icon_color=ft.colors.RED_400)
 
-    botao_inserir_militar = ft.FilledTonalButton(text="Inserir", icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600)
-    botao_editar_militar = ft.FilledTonalButton(text="Editar", icon=ft.icons.EDIT, icon_color=ft.colors.YELLOW_400)
-    botao_deletar_militar = ft.FilledTonalButton(text="Deletar", icon=ft.icons.DELETE, icon_color=ft.colors.RED_400)
+    botao_inserir_entorpecentes = ft.IconButton(icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600, bgcolor=ft.colors.BLUE_GREY_900, on_click=inserir_entorpecente)
+    botao_inserir_militar = ft.IconButton(icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600, bgcolor=ft.colors.BLUE_GREY_900, on_click=inserir_militar)
+    botao_inserir_envolvido = ft.IconButton(icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600, bgcolor=ft.colors.BLUE_GREY_900)
 
-    botao_inserir_envolvido = ft.FilledTonalButton(text="Inserir", icon=ft.icons.ADD, icon_color=ft.colors.GREEN_600)
-    botao_editar_envolvido = ft.FilledTonalButton(text="Editar", icon=ft.icons.EDIT, icon_color=ft.colors.YELLOW_400)
-    botao_deletar_envolvido = ft.FilledTonalButton(text="Deletar", icon=ft.icons.DELETE, icon_color=ft.colors.RED_400)
+    nav_primeiro_registro = ft.FloatingActionButton(icon=ft.icons.FIRST_PAGE)
+    nav_anterior_registro = ft.FloatingActionButton(icon=ft.icons.NAVIGATE_BEFORE)
+    nav_proximo_registro = ft.FloatingActionButton(icon=ft.icons.NAVIGATE_NEXT)
+    nav_ultimo_registro = ft.FloatingActionButton(icon=ft.icons.LAST_PAGE)
 
-    nav_primeiro_militar = ft.FloatingActionButton(icon=ft.icons.FIRST_PAGE)
-    nav_anterior_militar = ft.FloatingActionButton(icon=ft.icons.NAVIGATE_BEFORE)
-    nav_proximo_militar = ft.FloatingActionButton(icon=ft.icons.NAVIGATE_NEXT)
-    nav_ultimo_militar = ft.FloatingActionButton(icon=ft.icons.LAST_PAGE)
-
-    nav_primeiro_envolvido = ft.FloatingActionButton(icon=ft.icons.FIRST_PAGE)
-    nav_anterior_envolvido = ft.FloatingActionButton(icon=ft.icons.NAVIGATE_BEFORE)
-    nav_proximo_envolvido = ft.FloatingActionButton(icon=ft.icons.NAVIGATE_NEXT)
-    nav_ultimo_envolvido = ft.FloatingActionButton(icon=ft.icons.LAST_PAGE)
+    
 # ----------------------------------------------------------------------------------------------
 
 # Caixa de Seleção para os dados ---------------------------------------------------------------
@@ -87,7 +144,16 @@ def main(page: ft.Page):
         ]
     )
 
-    """Completar com a lista de bairros existentes organizada em ordem alfabética"""
+    funcao = ft.Dropdown(
+        label="Função",
+        border_color=ft.colors.GREY_800, 
+        width=150, 
+        options=[
+            ft.dropdown.Option("encarregado"),
+            ft.dropdown.Option("motorista"),
+            ft.dropdown.Option("auxiliar"),
+        ])
+
     bairro = ft.Dropdown(
         label="Bairro",
         border_color=ft.colors.GREY_800,
@@ -293,20 +359,48 @@ def main(page: ft.Page):
         ]
     )
 
-
+    condicao_envolvido = ft.Dropdown(
+        label="Condição",
+        border_color=ft.colors.GREY_800,
+        width= 150,
+        options=[
+            ft.dropdown.Option("Traficante"),
+            ft.dropdown.Option("Comparsa"),
+    ])
 # ----------------------------------------------------------------------------------------------
 
 # Caixas de Texto para entrada de dados --------------------------------------------------------
-    rua = ft.TextField(label="Rua/Avenida", width=350, border_color=ft.colors.GREY_800,)
+    rua = ft.TextField(label="Nome da via", width=370, border_color=ft.colors.GREY_800,)
     numero = ft.TextField(label="nº", width=50, border_color=ft.colors.GREY_800,)
     data = ft.TextField(label="Data", width=140, border_color=ft.colors.GREY_800)
     quantidade = ft.TextField(label="Qtd (Kg)", width=100, border_color=ft.colors.GREY_800)
     viatura = ft.TextField(label="Viatura", width=150, border_color=ft.colors.GREY_800, prefix_text="M-")
     re = ft.TextField(label="RE", width=100, border_color=ft.colors.GREY_800)
     nome_militar = ft.TextField(label="Nome do Militar", width=350, border_color=ft.colors.GREY_800)
-    registro_militar = ft.TextField(label="Registro", width=100, border_color=ft.colors.GREY_800)
-    registro_envolvido = ft.TextField(label="Registro", width=100, border_color=ft.colors.GREY_800)
+    talao = ft.TextField(label="Talão", width=100, border_color=ft.colors.GREY_800)
+    nome_envolvido = ft.TextField(label="Nome do Envolvido", width=350, border_color=ft.colors.GREY_800)
+    rg_envolvido = ft.TextField(label="RG", width=100, border_color=ft.colors.GREY_800)
+    registro = ft.TextField(label="Registro", width=120, border_color=ft.colors.GREY_800)
 # ----------------------------------------------------------------------------------------------
+
+    container_entorpecentes = ft.Container(
+        width=660,
+        border=ft.border.all(1, ft.colors.GREY_700),
+        padding=20,
+        margin=5,
+        border_radius= 10,
+        content=ft.Column([
+            ft.Row([
+                ft.Text("Entorpecentes", color=ft.colors.GREY_400, size=18, italic=True),
+                botao_inserir_entorpecentes                   
+            ]),
+            
+            ft.Row([
+                tipo_entorpecente,
+                quantidade,
+            ]),
+        ])
+    )
 
     container_militares = ft.Container(
         width=660,
@@ -315,24 +409,21 @@ def main(page: ft.Page):
         margin=5,
         border_radius= 10,
         content=ft.Column([
+            ft.Row([
             ft.Text("Militares", color=ft.colors.GREY_400, size=18, italic=True),
+            botao_inserir_militar
+            ]),
             ft.Row([
                 posto_grad,
                 re,
                 nome_militar
             ]),
             ft.Row([
-                botao_inserir_militar,
-                botao_editar_militar,
-                botao_deletar_militar
+                btl,
+                cia,
+                funcao,
+                viatura,
             ]),
-            ft.Row([
-                nav_primeiro_militar,
-                nav_anterior_militar,
-                nav_proximo_militar,
-                nav_ultimo_militar,
-                registro_militar
-            ])
         ])
     )
 
@@ -343,30 +434,22 @@ def main(page: ft.Page):
         margin=5,
         border_radius= 10,
         content=ft.Column([
-            ft.Text("Envolvidos", color=ft.colors.GREY_400, size=18, italic=True),
             ft.Row([
-                posto_grad,
-                re,
-                nome_militar
+                ft.Text("Envolvidos", color=ft.colors.GREY_400, size=18, italic=True),
+                botao_inserir_envolvido
             ]),
+
             ft.Row([
-                botao_inserir_envolvido,
-                botao_editar_envolvido,
-                botao_deletar_envolvido
+                condicao_envolvido,
+                rg_envolvido,
+                nome_envolvido
             ]),
-            ft.Row([
-                nav_primeiro_envolvido,
-                nav_anterior_envolvido,
-                nav_proximo_envolvido,
-                nav_ultimo_envolvido,
-                registro_envolvido
-            ])
         ])
     )
 
     container_inseridos = ft.Container(
         width=1160,
-        height=490,
+        height=520,
         border=ft.border.all(1, ft.colors.GREY_700),
         padding=20,
         margin=5,
@@ -388,8 +471,7 @@ def main(page: ft.Page):
             ft.Divider(color=ft.colors.GREY_700),
             ft.Row([
                 natureza, 
-                tipo_entorpecente,
-                quantidade,
+                talao,
                 data,
             ]),
 
@@ -402,13 +484,8 @@ def main(page: ft.Page):
             ]),
 
             ft.Row([
-                btl,
-                cia,
-                viatura,
-            ]),
-
-            ft.Row([
                 ft.Column([
+                    container_entorpecentes,
                     container_militares,
                     container_envolvidos,
                 ]),
@@ -416,7 +493,15 @@ def main(page: ft.Page):
             ]),
 
             ft.Row([
-                botao_inserir, 
+                nav_anterior_registro,
+                nav_primeiro_registro,
+                nav_proximo_registro, 
+                nav_ultimo_registro, 
+                registro
+            ]),
+
+            ft.Row([
+                botao_confirmar, 
                 botao_editar, 
                 botao_deletar,
             ]),
